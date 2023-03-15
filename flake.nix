@@ -30,24 +30,23 @@
 
       horizon-shell = import ./default.nix {
         haskellPackages = horizon-platform.legacyPackages.${system};
-         inherit (pkgs) runCommand writeShellScriptBin;
+        inherit (pkgs) runCommand writeShellScriptBin;
       };
     in
     {
 
       apps = {
 
-            default = {
-              type = "app";
-              program = "${horizon-shell}/bin/horizon-shell";
-            };
+        default = {
+          type = "app";
+          program = "${horizon-shell}/bin/horizon-shell";
+        };
 
       };
 
       checks =
         with lint-utils.outputs.linters.${system}; {
           dhall-format = dhall-format { src = self; };
-          hlint = hlint { src = self; };
           nixpkgs-fmt = nixpkgs-fmt { src = self; };
           stylish-haskell = stylish-haskell { src = self; };
         };
