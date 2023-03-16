@@ -12,7 +12,11 @@
 module ShellRC where
 
 import qualified Control.Lens        as L
+import qualified Data.ByteString     as BS
+import qualified Data.Text           as T
+import qualified Data.Text.Encoding  as T
 import qualified Dhall
+import qualified Dhall.Core
 import qualified Dhall.Pretty        as Dhall
 import qualified Horizon.Spec.Lens   as H
 import qualified Horizon.Spec.Pretty as H
@@ -33,6 +37,3 @@ _init :: IO ()
 _init = do
   initInteractive
   getEnv "REALHOME" >>= setEnv "HOME"
-
-loadHorizon :: IO H.HorizonExport
-loadHorizon = Dhall.inputFile @H.HorizonExport Dhall.auto "horizon.dhall"

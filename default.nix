@@ -21,7 +21,13 @@ let
     vector
   ];
 
-  ghc = haskellPackages.ghcWithPackages (_: libraries);
+  ghc = haskellPackages.ghcWithPackages (p:
+    libraries ++
+    [
+      p.bytestring
+      p.text
+    ]
+  );
 
   args = builtins.concatStringsSep " " [
     "-XDataKinds"
@@ -84,12 +90,24 @@ let
 
       ${builtins.concatStringsSep "\n" (map (x: "putStrLn \"    ${x}\"") (splitString "\n" (builtins.readFile horizon-module-imports)))}
 
-      :{
-      reformat :: IO ()
-      reformat = loadHorizon >>= H.writeHorizonFile
-      :}
+      putStrLn "  The following commands are available:"
 
-      hz <- loadHorizon
+      putStrLn ""
+
+      putStrLn "    reformat"
+
+      putStrLn ""
+
+      :{
+      loadHorizon :: IO H.HorizonExport
+      loadHorizon = Dhall.inputFile @H.HorizonExport Dhall.auto "horizon.dhall"
+
+      saveHorizon :: H.HorizonExport -> IO ()
+      saveHorizon = BS.writeFile "horizon.dhall" . T.encodeUtf8 . Dhall.Core.pretty . H.horizonExportToExpr
+
+      reformat :: IO ()
+      reformat = loadHorizon >>= saveHorizon
+      :}
 
     END
     cat ${horizon-module-imports} >> $out
