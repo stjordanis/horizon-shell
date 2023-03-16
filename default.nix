@@ -98,6 +98,11 @@ let
 
       putStrLn ""
 
+      import qualified Horizon.Spec.V0_10 as H
+      import qualified Horizon.Spec.Pretty as H
+      import qualified Data.Text.Encoding as T
+      import qualified Data.ByteString    as BS
+
       :{
       loadHorizon :: IO H.HorizonExport
       loadHorizon = Dhall.inputFile @H.HorizonExport Dhall.auto "horizon.dhall"
