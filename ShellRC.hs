@@ -13,6 +13,7 @@ module ShellRC where
 
 import qualified Control.Lens        as L
 import qualified Dhall
+import qualified Dhall.Pretty        as Dhall
 import qualified Horizon.Spec.Lens   as H
 import qualified Horizon.Spec.Pretty as H
 import qualified Horizon.Spec.V0_10  as H

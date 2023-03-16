@@ -84,6 +84,11 @@ let
 
       ${builtins.concatStringsSep "\n" (map (x: "putStrLn \"    ${x}\"") (splitString "\n" (builtins.readFile horizon-module-imports)))}
 
+      :{
+      reformat :: IO ()
+      reformat = loadHorizon >>= H.writeHorizonFile
+      :}
+
       hz <- loadHorizon
 
     END
