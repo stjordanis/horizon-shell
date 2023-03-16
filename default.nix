@@ -70,7 +70,7 @@ let
 
       putStrLn ""
 
-      putStrLn "  The following libraries are available:"
+      putStrLn "  The following haskell libraries are available:"
 
       putStrLn ""
 
