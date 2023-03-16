@@ -1,4 +1,4 @@
-{ haskellPackages, writeShellScriptBin, runCommand }:
+{ haskellPackages, writeShellScriptBin, runCommand, splitString }:
 
 let
 
@@ -8,9 +8,7 @@ let
   shellrcSrc = shellrcSrcPath;
   shellrcModulePath = builtins.replaceStrings [ "." ] [ "/" ] shellrcModule + ".hs";
 
-  ghc = haskellPackages.ghcWithPackages (p: with p; [
-    bytestring
-    containers
+  libraries = with haskellPackages; [
     dhall
     http-conduit
     horizon-gen-nix
@@ -20,9 +18,10 @@ let
     lens
     path
     procex
-    text
     vector
-  ]);
+  ];
+
+  ghc = haskellPackages.ghcWithPackages (_: libraries);
 
   args = builtins.concatStringsSep " " [
     "-XDataKinds"
@@ -39,6 +38,10 @@ let
     ${ghc}/bin/ghc -c -dynamic --make -i"$out" ${args} $out/${shellrcModulePath}
   '';
 
+  horizon-module-imports = runCommand "horizon-module-imports" { } ''
+    grep -E '^import .*$' < ${shellrcSrc}/${shellrcModulePath} >> $out
+  '';
+
   init = runCommand "ghci-init" { } ''
     cat > $out <<END
       :set +m -interactive-print Text.Pretty.Simple.pPrint
@@ -51,9 +54,40 @@ let
 
       _init
 
+      putStrLn ""
+
+      putStrLn "  \ESC[33m\STX##     ##  #######  ########  #### ########  #######  ##    ##   \ESC[m\STX##     ##    ###     ######  ##    ## ######## ##       ##       "
+      putStrLn "  \ESC[33m\STX##     ## ##     ## ##     ##  ##       ##  ##     ## ###   ##   \ESC[m\STX##     ##   ## ##   ##    ## ##   ##  ##       ##       ##       "
+      putStrLn "  \ESC[33m\STX##     ## ##     ## ##     ##  ##      ##   ##     ## ####  ##   \ESC[m\STX##     ##  ##   ##  ##       ##  ##   ##       ##       ##       "
+      putStrLn "  \ESC[33m\STX######### ##     ## ########   ##     ##    ##     ## ## ## ##   \ESC[m\STX######### ##     ##  ######  #####    ######   ##       ##       "
+      putStrLn "  \ESC[33m\STX##     ## ##     ## ##   ##    ##    ##     ##     ## ##  ####   \ESC[m\STX##     ## #########       ## ##  ##   ##       ##       ##       "
+      putStrLn "  \ESC[33m\STX##     ## ##     ## ##    ##   ##   ##      ##     ## ##   ###   \ESC[m\STX##     ## ##     ## ##    ## ##   ##  ##       ##       ##       "
+      putStrLn "  \ESC[33m\STX##     ##  #######  ##     ## #### ########  #######  ##    ##   \ESC[m\STX##     ## ##     ##  ######  ##    ## ######## ######## ######## "
+
+      putStrLn ""
+
+      putStrLn "  \ESC[1mNOTICE: This shell supports the dhall spec at version 0.10.0 located at https://store.horizon-haskell.net/horizon-spec-0.10.0/\ESC[0m"
+
+      putStrLn ""
+
+      putStrLn "  The following libraries are available:"
+
+      putStrLn ""
+
+      ${builtins.concatStringsSep "\n" (map (x: "putStrLn \"    ${x.name}\"") libraries)}
+
+      putStrLn ""
+
+      putStrLn "  The following modules are loaded:"
+
+      putStrLn ""
+
+      ${builtins.concatStringsSep "\n" (map (x: "putStrLn \"    ${x}\"") (splitString "\n" (builtins.readFile horizon-module-imports)))}
+
       hz <- loadHorizon
+
     END
-    grep -E '^import .*$' < ${shellrcSrc}/${shellrcModulePath} >> $out
+    cat ${horizon-module-imports} >> $out
   '';
 
 in

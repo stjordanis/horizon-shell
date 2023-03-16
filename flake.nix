@@ -26,11 +26,13 @@
     in
     with pkgs.haskell.lib;
     with pkgs.writers;
+    with pkgs.lib;
     let
 
       horizon-shell = import ./default.nix {
         haskellPackages = horizon-platform.legacyPackages.${system};
         inherit (pkgs) runCommand writeShellScriptBin;
+        inherit (pkgs.lib) splitString;
       };
     in
     {
