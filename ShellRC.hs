@@ -63,7 +63,7 @@ hackagePkg (H.MkName x) = do
   getResponseBody <$> httpJSON k
 
 getVersions :: A.Value -> [Text]
-getVersions = Map.keys . A.toMapText . L.view L._Object
+getVersions = Map.keys . Map.filter (\x -> x == A.String "normal") . A.toMapText . L.view L._Object
 
 toPVPVersion :: Text -> Either (M.ParseErrorBundle Text Text) PVPVersion
 toPVPVersion = fmap MkPVPVersion . M.parse numbers ""
