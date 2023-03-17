@@ -98,6 +98,7 @@ let
       putStrLn ""
 
       putStrLn "    reformat"
+      putStrLn "    tryToUpgradeEverything"
 
       putStrLn ""
 
