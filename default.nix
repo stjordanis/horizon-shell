@@ -16,6 +16,8 @@ let
     horizon-spec-lens
     horizon-spec-pretty
     lens
+    lens-aeson
+    megaparsec
     path
     procex
     vector
@@ -25,6 +27,7 @@ let
     libraries ++
     [
       p.bytestring
+      p.containers
       p.text
     ]
   );
@@ -102,6 +105,7 @@ let
       import qualified Horizon.Spec.Pretty as H
       import qualified Data.Text.Encoding as T
       import qualified Data.ByteString    as BS
+      import qualified Control.Lens       as L
 
       :{
       loadHorizon :: IO H.HorizonExport
@@ -109,6 +113,18 @@ let
 
       saveHorizon :: H.HorizonExport -> IO ()
       saveHorizon = BS.writeFile "horizon.dhall" . T.encodeUtf8 . Dhall.Core.pretty . H.horizonExportToExpr
+
+      bumpHackage :: H.Name -> IO ()
+      bumpHackage x = do
+        hz <- loadHorizon
+        t <- hackagePkgLatest x
+        let f = L.ix x . sourceL . _FromHackage . L.lens H.version (\x y -> x { H.version = y }) L..~ t
+        saveHorizon (f hz)
+
+      tryToUpgradeEverything :: IO ()
+      tryToUpgradeEverything = do
+        hz <- loadHorizon
+        L.traverseOf_ _Hackages (bumpHackage . H.name) hz
 
       reformat :: IO ()
       reformat = loadHorizon >>= saveHorizon
