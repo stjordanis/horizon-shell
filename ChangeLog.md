@@ -1,5 +1,10 @@
 # ChangeLog for horizon-shell
 
+## 0.0.6
+
+* Add `addHackage` function.
+* `horizon-spec-pretty`: 0.1.0 -> 0.1.1
+
 ## 0.0.5
 
 * Fix hackage query to ignore deprecated versions.
