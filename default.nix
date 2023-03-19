@@ -28,6 +28,7 @@ let
     [
       p.bytestring
       p.containers
+      p.mtl
       p.text
     ]
   );
@@ -119,7 +120,14 @@ let
       bumpHackage x = do
         hz <- loadHorizon
         t <- hackagePkgLatest x
-        let f = L.ix x . sourceL . _FromHackage . L.lens H.version (\x y -> x { H.version = y }) L..~ t
+        let f = L.ix x . sourceL . _FromHackage . L.lens H.version (\z y -> z { H.version = y }) L..~ t
+        saveHorizon (f hz)
+
+      addHackage :: H.Name -> IO ()
+      addHackage x = do
+        hz <- loadHorizon
+        t <- hackagePkgLatest x
+        let f = L.at x L..~ Just (H.callHackage x t)
         saveHorizon (f hz)
 
       tryToUpgradeEverything :: IO ()
