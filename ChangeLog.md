@@ -1,5 +1,9 @@
 # ChangeLog for horizon-shell
 
+## 0.0.7
+
+* Rewrite in terms of crazy-shell.
+
 ## 0.0.6
 
 * Add `addHackage` function.
