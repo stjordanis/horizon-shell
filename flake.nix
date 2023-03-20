@@ -8,7 +8,7 @@
   };
 
   inputs = {
-    crazy-shell.url = "git+https://gitlab.homotopic.tech/crazy-shell/crazy-shell";
+    crazyshell.url = "git+https://gitlab.horizon-haskell.net/shells/crazyshell";
     flake-utils.url = "github:numtide/flake-utils";
     horizon-platform.url = "git+https://gitlab.horizon-haskell.net/package-sets/horizon-platform";
     lint-utils = {
@@ -20,7 +20,7 @@
   outputs =
     inputs@
     { self
-    , crazy-shell
+    , crazyshell
     , flake-utils
     , horizon-platform
     , lint-utils
@@ -28,7 +28,7 @@
     , ...
     }:
     flake-utils.lib.eachSystem [ "x86_64-linux" ] (system:
-      with crazy-shell.lib;
+      with crazyshell.lib;
       let
         pkgs = import nixpkgs { inherit system; };
 

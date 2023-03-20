@@ -1,6 +1,6 @@
 {
   "nodes": {
-    "crazy-shell": {
+    "crazyshell": {
       "inputs": {
         "flake-utils": "flake-utils",
         "get-flake": "get-flake",
@@ -9,17 +9,17 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1679319422,
-        "narHash": "sha256-D66g14JYHGPOikYOIoZh5YZ2fo4gw4LBu1Z7uoIyaIw=",
+        "lastModified": 1679339341,
+        "narHash": "sha256-k/BKi4/Iev7TKdI31WRUU4scSAWWZaOeZ/WQMEPr0go=",
         "ref": "refs/heads/master",
-        "rev": "5a278497b7fa06252895a655b03a3b2bc98786a0",
-        "revCount": 18,
+        "rev": "1176acbce8ef27e723241c76fbcd8349305fb60e",
+        "revCount": 19,
         "type": "git",
-        "url": "https://gitlab.homotopic.tech/crazy-shell/crazy-shell"
+        "url": "https://gitlab.horizon-haskell.net/shells/crazyshell"
       },
       "original": {
         "type": "git",
-        "url": "https://gitlab.homotopic.tech/crazy-shell/crazy-shell"
+        "url": "https://gitlab.horizon-haskell.net/shells/crazyshell"
       }
     },
     "devenv": {
@@ -300,7 +300,7 @@
     "gitignore": {
       "inputs": {
         "nixpkgs": [
-          "crazy-shell",
+          "crazyshell",
           "horizon-platform",
           "devenv",
           "pre-commit-hooks",
@@ -445,7 +445,7 @@
       "inputs": {
         "flake-utils": "flake-utils_4",
         "nixpkgs": [
-          "crazy-shell",
+          "crazyshell",
           "nixpkgs"
         ]
       },
@@ -539,7 +539,7 @@
       "inputs": {
         "lowdown-src": "lowdown-src",
         "nixpkgs": [
-          "crazy-shell",
+          "crazyshell",
           "horizon-platform",
           "devenv",
           "nixpkgs"
@@ -817,7 +817,7 @@
     "pre-commit-hooks": {
       "inputs": {
         "flake-compat": [
-          "crazy-shell",
+          "crazyshell",
           "horizon-platform",
           "devenv",
           "flake-compat"
@@ -825,7 +825,7 @@
         "flake-utils": "flake-utils_2",
         "gitignore": "gitignore",
         "nixpkgs": [
-          "crazy-shell",
+          "crazyshell",
           "horizon-platform",
           "devenv",
           "nixpkgs"
@@ -878,7 +878,7 @@
     },
     "root": {
       "inputs": {
-        "crazy-shell": "crazy-shell",
+        "crazyshell": "crazyshell",
         "flake-utils": "flake-utils_5",
         "horizon-platform": "horizon-platform_3",
         "lint-utils": "lint-utils_4",

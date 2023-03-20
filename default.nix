@@ -24,17 +24,17 @@ let
   ];
 
   header = ''
-    \ESC[33m\STX##     ##  #######  ########  #### ########  #######  ##    ##   \ESC[m\STX##     ##    ###     ######  ##    ## ######## ##       ##       "
-    \ESC[33m\STX##     ## ##     ## ##     ##  ##       ##  ##     ## ###   ##   \ESC[m\STX##     ##   ## ##   ##    ## ##   ##  ##       ##       ##       "
-    \ESC[33m\STX##     ## ##     ## ##     ##  ##      ##   ##     ## ####  ##   \ESC[m\STX##     ##  ##   ##  ##       ##  ##   ##       ##       ##       "
-    \ESC[33m\STX######### ##     ## ########   ##     ##    ##     ## ## ## ##   \ESC[m\STX######### ##     ##  ######  #####    ######   ##       ##       "
-    \ESC[33m\STX##     ## ##     ## ##   ##    ##    ##     ##     ## ##  ####   \ESC[m\STX##     ## #########       ## ##  ##   ##       ##       ##       "
-    \ESC[33m\STX##     ## ##     ## ##    ##   ##   ##      ##     ## ##   ###   \ESC[m\STX##     ## ##     ## ##    ## ##   ##  ##       ##       ##       "
-    \ESC[33m\STX##     ##  #######  ##     ## #### ########  #######  ##    ##   \ESC[m\STX##     ## ##     ##  ######  ##    ## ######## ######## ######## "
+    \ESC[33m\STX##     ##  #######  ########  #### ########  #######  ##    ##   \ESC[m\STX##     ##    ###     ######  ##    ## ######## ##       ##     
+    \ESC[33m\STX##     ## ##     ## ##     ##  ##       ##  ##     ## ###   ##   \ESC[m\STX##     ##   ## ##   ##    ## ##   ##  ##       ##       ##     
+    \ESC[33m\STX##     ## ##     ## ##     ##  ##      ##   ##     ## ####  ##   \ESC[m\STX##     ##  ##   ##  ##       ##  ##   ##       ##       ##     
+    \ESC[33m\STX######### ##     ## ########   ##     ##    ##     ## ## ## ##   \ESC[m\STX######### ##     ##  ######  #####    ######   ##       ##     
+    \ESC[33m\STX##     ## ##     ## ##   ##    ##    ##     ##     ## ##  ####   \ESC[m\STX##     ## #########       ## ##  ##   ##       ##       ##     
+    \ESC[33m\STX##     ## ##     ## ##    ##   ##   ##      ##     ## ##   ###   \ESC[m\STX##     ## ##     ## ##    ## ##   ##  ##       ##       ##     
+    \ESC[33m\STX##     ##  #######  ##     ## #### ########  #######  ##    ##   \ESC[m\STX##     ## ##     ##  ######  ##    ## ######## ######## ########
   '';
 
   notice = ''
-    \ESC[1mNOTICE: This shell supports the dhall spec at version 0.10.0 located at https://store.horizon-haskell.net/horizon-spec-0.10.0/\ESC[0m"
+    \ESC[1mNOTICE: This shell supports the dhall spec at version 0.10.0 located at https://store.horizon-haskell.net/horizon-spec-0.10.0/\ESC[0m
   '';
 
   advice = ''
@@ -86,11 +86,13 @@ let
   ];
 
   promptFunction = ''
+    :{
     promptFunction :: [String] -> Int -> IO String
     promptFunction _modules _line = do
       d <- getEnv "PWD"
       setCurrentDirectory d
       pure $ "\ESC[33m\STXHorizon: \ESC[m\STX"
+     :}
   '';
 
   ghci-script = ''
