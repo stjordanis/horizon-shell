@@ -1,6 +1,5 @@
 {
 
-
   description = "horizon-shell";
 
   nixConfig = {
@@ -9,7 +8,7 @@
   };
 
   inputs = {
-    get-flake.url = "github:ursi/get-flake";
+    crazy-shell.url = "git+https://gitlab.homotopic.tech/crazy-shell/crazy-shell";
     flake-utils.url = "github:numtide/flake-utils";
     horizon-platform.url = "git+https://gitlab.horizon-haskell.net/package-sets/horizon-platform";
     lint-utils = {
@@ -21,7 +20,7 @@
   outputs =
     inputs@
     { self
-    , get-flake
+    , crazy-shell
     , flake-utils
     , horizon-platform
     , lint-utils
@@ -29,39 +28,35 @@
     , ...
     }:
     flake-utils.lib.eachSystem [ "x86_64-linux" ] (system:
-    let
-      pkgs = import nixpkgs { inherit system; };
-    in
-    with pkgs.haskell.lib;
-    with pkgs.writers;
-    with pkgs.lib;
-    let
+      with crazy-shell.lib;
+      let
+        pkgs = import nixpkgs { inherit system; };
 
-      horizon-shell = import ./default.nix {
         haskellPackages = horizon-platform.legacyPackages.${system};
-        inherit (pkgs) runCommand writeShellScriptBin;
-        inherit (pkgs.lib) splitString;
-      };
-    in
-    {
 
-      apps = {
+        horizon-shell = import ./default.nix {
+          inherit pkgs haskellPackages mkCrazyShell;
+        };
+      in
+      {
 
-        default = {
-          type = "app";
-          program = "${horizon-shell}/bin/horizon-shell";
+        apps = {
+
+          default = {
+            type = "app";
+            program = "${horizon-shell}/bin/horizon-shell";
+          };
+
         };
 
-      };
+        checks =
+          with lint-utils.outputs.linters.${system}; {
+            dhall-format = dhall-format { src = self; };
+            nixpkgs-fmt = nixpkgs-fmt { src = self; };
+            stylish-haskell = stylish-haskell { src = self; };
+          };
 
-      checks =
-        with lint-utils.outputs.linters.${system}; {
-          dhall-format = dhall-format { src = self; };
-          nixpkgs-fmt = nixpkgs-fmt { src = self; };
-          stylish-haskell = stylish-haskell { src = self; };
-        };
+        packages.default = horizon-shell;
 
-      packages.default = horizon-shell;
-
-    });
+      });
 }
